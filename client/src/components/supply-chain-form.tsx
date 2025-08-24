@@ -249,13 +249,124 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
                         <label className="block text-sm font-medium text-gray-700 mb-1">
                           Products/Services
                         </label>
-                        <Textarea
-                          placeholder="Semiconductor components, microprocessors, memory modules"
-                          rows={2}
-                          value={supplier.products}
-                          onChange={(e) => updateSupplier(index, "products", e.target.value)}
-                          data-testid={`textarea-supplier-products-${index}`}
-                        />
+                        <div className="space-y-3">
+                          {/* Predefined Product Categories as Checkboxes */}
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                            <label className="flex items-center space-x-2">
+                              <Checkbox 
+                                checked={supplier.products?.includes('Semiconductor components')}
+                                onCheckedChange={(checked) => {
+                                  const currentProducts = supplier.products?.split(', ') || [];
+                                  if (checked) {
+                                    updateSupplier(index, 'products', [...currentProducts, 'Semiconductor components'].join(', '));
+                                  } else {
+                                    updateSupplier(index, 'products', currentProducts.filter(p => p !== 'Semiconductor components').join(', '));
+                                  }
+                                }}
+                                data-testid={`checkbox-products-semiconductor-${index}`}
+                              />
+                              <span className="text-xs">Semiconductor components</span>
+                            </label>
+                            <label className="flex items-center space-x-2">
+                              <Checkbox 
+                                checked={supplier.products?.includes('Microprocessors')}
+                                onCheckedChange={(checked) => {
+                                  const currentProducts = supplier.products?.split(', ') || [];
+                                  if (checked) {
+                                    updateSupplier(index, 'products', [...currentProducts, 'Microprocessors'].join(', '));
+                                  } else {
+                                    updateSupplier(index, 'products', currentProducts.filter(p => p !== 'Microprocessors').join(', '));
+                                  }
+                                }}
+                                data-testid={`checkbox-products-microprocessors-${index}`}
+                              />
+                              <span className="text-xs">Microprocessors</span>
+                            </label>
+                            <label className="flex items-center space-x-2">
+                              <Checkbox 
+                                checked={supplier.products?.includes('Memory modules')}
+                                onCheckedChange={(checked) => {
+                                  const currentProducts = supplier.products?.split(', ') || [];
+                                  if (checked) {
+                                    updateSupplier(index, 'products', [...currentProducts, 'Memory modules'].join(', '));
+                                  } else {
+                                    updateSupplier(index, 'products', currentProducts.filter(p => p !== 'Memory modules').join(', '));
+                                  }
+                                }}
+                                data-testid={`checkbox-products-memory-${index}`}
+                              />
+                              <span className="text-xs">Memory modules</span>
+                            </label>
+                            <label className="flex items-center space-x-2">
+                              <Checkbox 
+                                checked={supplier.products?.includes('Electronic assemblies')}
+                                onCheckedChange={(checked) => {
+                                  const currentProducts = supplier.products?.split(', ') || [];
+                                  if (checked) {
+                                    updateSupplier(index, 'products', [...currentProducts, 'Electronic assemblies'].join(', '));
+                                  } else {
+                                    updateSupplier(index, 'products', currentProducts.filter(p => p !== 'Electronic assemblies').join(', '));
+                                  }
+                                }}
+                                data-testid={`checkbox-products-assemblies-${index}`}
+                              />
+                              <span className="text-xs">Electronic assemblies</span>
+                            </label>
+                            <label className="flex items-center space-x-2">
+                              <Checkbox 
+                                checked={supplier.products?.includes('Raw materials')}
+                                onCheckedChange={(checked) => {
+                                  const currentProducts = supplier.products?.split(', ') || [];
+                                  if (checked) {
+                                    updateSupplier(index, 'products', [...currentProducts, 'Raw materials'].join(', '));
+                                  } else {
+                                    updateSupplier(index, 'products', currentProducts.filter(p => p !== 'Raw materials').join(', '));
+                                  }
+                                }}
+                                data-testid={`checkbox-products-materials-${index}`}
+                              />
+                              <span className="text-xs">Raw materials</span>
+                            </label>
+                            <label className="flex items-center space-x-2">
+                              <Checkbox 
+                                checked={supplier.products?.includes('Packaging services')}
+                                onCheckedChange={(checked) => {
+                                  const currentProducts = supplier.products?.split(', ') || [];
+                                  if (checked) {
+                                    updateSupplier(index, 'products', [...currentProducts, 'Packaging services'].join(', '));
+                                  } else {
+                                    updateSupplier(index, 'products', currentProducts.filter(p => p !== 'Packaging services').join(', '));
+                                  }
+                                }}
+                                data-testid={`checkbox-products-packaging-${index}`}
+                              />
+                              <span className="text-xs">Packaging services</span>
+                            </label>
+                          </div>
+                          
+                          {/* Other Products Text Area */}
+                          <div className="mt-3">
+                            <label className="flex items-center space-x-2 mb-2">
+                              <Checkbox data-testid={`checkbox-products-other-${index}`} />
+                              <span className="text-xs font-medium">Other products/services (specify below)</span>
+                            </label>
+                            <Textarea
+                              placeholder="Describe any additional products or services not listed above..."
+                              rows={2}
+                              onChange={(e) => {
+                                const otherProducts = e.target.value;
+                                const predefinedProducts = ['Semiconductor components', 'Microprocessors', 'Memory modules', 'Electronic assemblies', 'Raw materials', 'Packaging services']
+                                  .filter(product => supplier.products?.includes(product));
+                                if (otherProducts.trim()) {
+                                  updateSupplier(index, 'products', [...predefinedProducts, otherProducts].join(', '));
+                                } else {
+                                  updateSupplier(index, 'products', predefinedProducts.join(', '));
+                                }
+                              }}
+                              data-testid={`textarea-products-other-${index}`}
+                            />
+                          </div>
+                        </div>
                       </div>
                       {suppliers.length > 1 && (
                         <div className="mt-3 flex justify-end">
