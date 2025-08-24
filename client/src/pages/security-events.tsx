@@ -53,7 +53,10 @@ export default function SecurityEventsPage() {
 
   // Mutation for triggering security events
   const triggerEventMutation = useMutation({
-    mutationFn: () => apiRequest('/api/security/trigger-event', 'POST', {}),
+    mutationFn: async () => {
+      const response = await apiRequest('POST', '/api/security/trigger-event', {});
+      return response.json();
+    },
     onSuccess: (data: any) => {
       if (data.success && data.event) {
         setCurrentEvent(data.event);
@@ -75,7 +78,10 @@ export default function SecurityEventsPage() {
 
   // Mutation for checking weather alerts
   const checkWeatherMutation = useMutation({
-    mutationFn: () => apiRequest('GET', '/api/security/weather-alert'),
+    mutationFn: async () => {
+      const response = await apiRequest('GET', '/api/security/weather-alert');
+      return response.json();
+    },
     onSuccess: (data: any) => {
       if (data.success && data.alert) {
         setWeatherData(data.alert);
