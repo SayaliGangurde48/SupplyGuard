@@ -222,45 +222,90 @@ export default function SecurityEventMonitor({ assessment }: SecurityEventMonito
   };
 
   return (
-    <Card className="mt-6">
-      <CardHeader>
+    <Card className="mt-6 relative overflow-hidden bg-gray-900 border-gray-700">
+      {/* World Map Background */}
+      <div 
+        className="absolute inset-0 opacity-20 bg-cover bg-center"
+        style={{
+          backgroundImage: `url('data:image/svg+xml,${encodeURIComponent(`
+            <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(59, 130, 246, 0.1)" stroke-width="1"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+              <!-- Simplified world continents -->
+              <path d="M150 120 Q200 100 250 120 Q300 110 350 130 Q400 120 450 140 L480 160 Q460 180 430 170 Q380 180 330 175 Q280 185 230 175 Q180 180 150 160 Z" fill="rgba(59, 130, 246, 0.15)" stroke="rgba(59, 130, 246, 0.3)" stroke-width="1"/>
+              <path d="M120 200 Q170 180 220 200 Q270 190 320 210 L350 230 Q320 250 290 240 Q240 250 190 245 Q140 250 120 230 Z" fill="rgba(59, 130, 246, 0.15)" stroke="rgba(59, 130, 246, 0.3)" stroke-width="1"/>
+              <path d="M500 140 Q550 130 600 150 Q650 140 700 160 L730 180 Q710 200 680 190 Q630 200 580 195 Q530 200 500 180 Z" fill="rgba(59, 130, 246, 0.15)" stroke="rgba(59, 130, 246, 0.3)" stroke-width="1"/>
+              <!-- Connection lines -->
+              <line x1="200" y1="140" x2="550" y2="160" stroke="rgba(34, 197, 94, 0.4)" stroke-width="2" stroke-dasharray="5,5">
+                <animate attributeName="stroke-dashoffset" values="0;10" dur="2s" repeatCount="indefinite"/>
+              </line>
+              <line x1="170" y1="220" x2="320" y2="200" stroke="rgba(34, 197, 94, 0.4)" stroke-width="2" stroke-dasharray="5,5">
+                <animate attributeName="stroke-dashoffset" values="0;10" dur="2s" repeatCount="indefinite"/>
+              </line>
+              <line x1="300" y1="130" x2="180" y2="210" stroke="rgba(34, 197, 94, 0.4)" stroke-width="2" stroke-dasharray="5,5">
+                <animate attributeName="stroke-dashoffset" values="0;10" dur="2s" repeatCount="indefinite"/>
+              </line>
+              <!-- Port nodes -->
+              <circle cx="200" cy="140" r="4" fill="rgba(59, 130, 246, 0.8)">
+                <animate attributeName="r" values="3;6;3" dur="3s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="550" cy="160" r="4" fill="rgba(59, 130, 246, 0.8)">
+                <animate attributeName="r" values="3;6;3" dur="3s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="170" cy="220" r="4" fill="rgba(59, 130, 246, 0.8)">
+                <animate attributeName="r" values="3;6;3" dur="3s" repeatCount="indefinite"/>
+              </circle>
+              <circle cx="320" cy="200" r="4" fill="rgba(59, 130, 246, 0.8)">
+                <animate attributeName="r" values="3;6;3" dur="3s" repeatCount="indefinite"/>
+              </circle>
+            </svg>
+          `)}`
+        }}
+      />
+      
+      <CardHeader className="relative z-10">
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="flex items-center space-x-2">
-              <Shield className="h-5 w-5 text-blue-600" />
-              <span>Security Event Monitor</span>
+            <CardTitle className="flex items-center space-x-2 text-white">
+              <Shield className="h-5 w-5 text-blue-400" />
+              <span>🌍 Global Security Event Monitor</span>
             </CardTitle>
-            <p className="text-gray-600 text-sm mt-1">
-              Real-time customs, security & weather alerts for major ports
+            <p className="text-gray-300 text-sm mt-1">
+              Real-time customs, security & weather alerts for major ports worldwide
             </p>
           </div>
           <div className="flex space-x-2">
             <select 
               value={selectedPort.code} 
               onChange={(e) => setSelectedPort(MAJOR_PORTS.find(p => p.code === e.target.value) || MAJOR_PORTS[0])}
-              className="text-sm border rounded px-2 py-1"
+              className="text-sm bg-gray-800 border-gray-600 text-white rounded px-2 py-1"
               data-testid="select-port"
             >
               {MAJOR_PORTS.map(port => (
-                <option key={port.code} value={port.code}>{port.name}</option>
+                <option key={port.code} value={port.code} className="bg-gray-800">{port.name}</option>
               ))}
             </select>
           </div>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="relative z-10">
         {/* Control Panel */}
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        <div className="mb-6 p-4 bg-gray-800/80 border border-gray-600 rounded-lg backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="font-medium text-blue-900">Monitoring Controls</h4>
-              <p className="text-sm text-blue-700">Simulate disruptions and check conditions</p>
+              <h4 className="font-medium text-blue-300">🎮 Monitoring Controls</h4>
+              <p className="text-sm text-gray-300">Simulate disruptions and check conditions</p>
             </div>
             <div className="flex space-x-2">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={triggerSecurityEvent}
+                className="bg-red-600/20 border-red-500 text-red-300 hover:bg-red-600/30"
                 data-testid="button-trigger-event"
               >
                 <AlertTriangle className="h-4 w-4 mr-2" />
@@ -271,6 +316,7 @@ export default function SecurityEventMonitor({ assessment }: SecurityEventMonito
                 size="sm"
                 onClick={checkWeatherAlert}
                 disabled={isLoading}
+                className="bg-blue-600/20 border-blue-500 text-blue-300 hover:bg-blue-600/30"
                 data-testid="button-check-weather"
               >
                 {isLoading ? (
@@ -286,29 +332,29 @@ export default function SecurityEventMonitor({ assessment }: SecurityEventMonito
 
         {/* Current Weather (if available) */}
         {weatherData[selectedPort.code] && (
-          <div className="mb-6 p-4 bg-gray-50 border rounded-lg">
-            <h4 className="font-medium text-gray-900 mb-2">🌤️ Current Conditions - {selectedPort.name}</h4>
+          <div className="mb-6 p-4 bg-gray-800/60 border border-gray-600 rounded-lg backdrop-blur-sm">
+            <h4 className="font-medium text-white mb-2">🌤️ Current Conditions - {selectedPort.name}</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
-                <span className="text-gray-600">Temperature:</span>
-                <div className="font-bold">{weatherData[selectedPort.code].temperature}°C</div>
+                <span className="text-gray-400">Temperature:</span>
+                <div className="font-bold text-blue-300">{weatherData[selectedPort.code].temperature}°C</div>
               </div>
               <div>
-                <span className="text-gray-600">Wind Speed:</span>
-                <div className="font-bold">{weatherData[selectedPort.code].windSpeed} km/h</div>
+                <span className="text-gray-400">Wind Speed:</span>
+                <div className="font-bold text-green-300">{weatherData[selectedPort.code].windSpeed} km/h</div>
               </div>
               <div>
-                <span className="text-gray-600">Precipitation:</span>
-                <div className="font-bold">{weatherData[selectedPort.code].precipitation} mm</div>
+                <span className="text-gray-400">Precipitation:</span>
+                <div className="font-bold text-cyan-300">{weatherData[selectedPort.code].precipitation} mm</div>
               </div>
               <div>
-                <span className="text-gray-600">Conditions:</span>
-                <div className="font-bold">{weatherData[selectedPort.code].conditions}</div>
+                <span className="text-gray-400">Conditions:</span>
+                <div className="font-bold text-yellow-300">{weatherData[selectedPort.code].conditions}</div>
               </div>
             </div>
             {weatherData[selectedPort.code].alerts.length > 0 && (
-              <div className="mt-3 p-2 bg-yellow-100 border border-yellow-300 rounded">
-                <p className="text-sm text-yellow-800 font-medium">⚠️ {weatherData[selectedPort.code].alerts[0]}</p>
+              <div className="mt-3 p-2 bg-yellow-900/30 border border-yellow-600 rounded">
+                <p className="text-sm text-yellow-300 font-medium">⚠️ {weatherData[selectedPort.code].alerts[0]}</p>
               </div>
             )}
           </div>
@@ -316,19 +362,19 @@ export default function SecurityEventMonitor({ assessment }: SecurityEventMonito
 
         {/* Active Security Events */}
         <div className="space-y-4">
-          <h4 className="font-medium text-gray-900">🚨 Active & Recent Events</h4>
+          <h4 className="font-medium text-white">🚨 Active & Recent Events</h4>
           
           {events.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              <Shield className="h-12 w-12 mx-auto text-gray-300 mb-2" />
-              <p>No security events detected</p>
-              <p className="text-sm">Use controls above to simulate events</p>
+            <div className="text-center py-8 text-gray-400">
+              <Shield className="h-12 w-12 mx-auto text-gray-600 mb-2" />
+              <p className="text-white">No security events detected</p>
+              <p className="text-sm text-gray-300">Use controls above to simulate events</p>
             </div>
           ) : (
             events.map((event) => {
               const severity = getEventSeverity(event);
               return (
-                <Card key={event.id} className={`${severity.bgColor} transition-all duration-300`}>
+                <Card key={event.id} className={`bg-gray-800/80 border-gray-600 backdrop-blur-sm transition-all duration-300 ${severity.level === 'High' ? 'border-red-500/50' : severity.level === 'Medium' ? 'border-orange-500/50' : 'border-green-500/50'}`}>
                   <CardContent className="pt-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -345,37 +391,37 @@ export default function SecurityEventMonitor({ assessment }: SecurityEventMonito
                           </span>
                         </div>
                         
-                        <h5 className="font-semibold text-gray-900 mb-1" data-testid={`event-title-${event.id}`}>
+                        <h5 className="font-semibold text-white mb-1" data-testid={`event-title-${event.id}`}>
                           {event.alertType.charAt(0).toUpperCase() + event.alertType.slice(1)} Alert - {event.portName}
                         </h5>
                         
-                        <p className="text-sm text-gray-700 mb-3" data-testid={`event-description-${event.id}`}>
+                        <p className="text-sm text-gray-300 mb-3" data-testid={`event-description-${event.id}`}>
                           {event.description}
                         </p>
 
                         {/* Event Metrics */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs">
-                          <div className="bg-white/50 p-2 rounded">
-                            <div className="text-gray-600">Duration</div>
-                            <div className="font-bold text-lg" data-testid={`event-duration-${event.id}`}>
+                          <div className="bg-gray-700/50 p-2 rounded border border-gray-600">
+                            <div className="text-gray-400">Duration</div>
+                            <div className="font-bold text-lg text-blue-300" data-testid={`event-duration-${event.id}`}>
                               {event.duration} days
                             </div>
                           </div>
-                          <div className="bg-white/50 p-2 rounded">
-                            <div className="text-gray-600">Inspection Rate</div>
-                            <div className="font-bold text-lg" data-testid={`event-inspection-${event.id}`}>
+                          <div className="bg-gray-700/50 p-2 rounded border border-gray-600">
+                            <div className="text-gray-400">Inspection Rate</div>
+                            <div className="font-bold text-lg text-orange-300" data-testid={`event-inspection-${event.id}`}>
                               {event.inspectionRate}%
                             </div>
                           </div>
-                          <div className="bg-white/50 p-2 rounded">
-                            <div className="text-gray-600">Clearance Time</div>
-                            <div className="font-bold text-lg" data-testid={`event-clearance-${event.id}`}>
+                          <div className="bg-gray-700/50 p-2 rounded border border-gray-600">
+                            <div className="text-gray-400">Clearance Time</div>
+                            <div className="font-bold text-lg text-red-300" data-testid={`event-clearance-${event.id}`}>
                               {event.clearanceMultiplier}x
                             </div>
                           </div>
-                          <div className="bg-white/50 p-2 rounded">
-                            <div className="text-gray-600">Confidence</div>
-                            <div className="font-bold text-lg" data-testid={`event-confidence-${event.id}`}>
+                          <div className="bg-gray-700/50 p-2 rounded border border-gray-600">
+                            <div className="text-gray-400">Confidence</div>
+                            <div className="font-bold text-lg text-green-300" data-testid={`event-confidence-${event.id}`}>
                               {event.confidence}%
                             </div>
                           </div>
@@ -391,24 +437,24 @@ export default function SecurityEventMonitor({ assessment }: SecurityEventMonito
 
         {/* Impact Summary */}
         {events.length > 0 && (
-          <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <h4 className="font-medium text-yellow-900 mb-2">📊 Impact Analysis</h4>
+          <div className="mt-6 p-4 bg-gradient-to-r from-purple-900/30 to-blue-900/30 border border-purple-500/30 rounded-lg backdrop-blur-sm">
+            <h4 className="font-medium text-purple-300 mb-2">📊 Global Impact Analysis</h4>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
               <div>
-                <span className="text-yellow-700">Active Events:</span>
-                <div className="font-bold text-yellow-900">
+                <span className="text-gray-400">Active Events:</span>
+                <div className="font-bold text-yellow-300 text-lg">
                   {events.filter(e => e.status === 'active').length}
                 </div>
               </div>
               <div>
-                <span className="text-yellow-700">Avg. Delay Multiplier:</span>
-                <div className="font-bold text-yellow-900">
+                <span className="text-gray-400">Avg. Delay Multiplier:</span>
+                <div className="font-bold text-orange-300 text-lg">
                   {(events.reduce((sum, e) => sum + e.clearanceMultiplier, 0) / events.length).toFixed(1)}x
                 </div>
               </div>
               <div>
-                <span className="text-yellow-700">High Risk Events:</span>
-                <div className="font-bold text-yellow-900">
+                <span className="text-gray-400">High Risk Events:</span>
+                <div className="font-bold text-red-300 text-lg">
                   {events.filter(e => getEventSeverity(e).level === 'High').length}
                 </div>
               </div>
