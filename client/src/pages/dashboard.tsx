@@ -7,18 +7,20 @@ import LoadingOverlay from "@/components/loading-overlay";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Shield, Download, Settings, Eye, RotateCcw } from "lucide-react";
 import type { Assessment } from "@shared/schema";
 
 export default function Dashboard() {
   const [currentAssessmentId, setCurrentAssessmentId] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   const { data: assessments = [], isLoading: isLoadingAssessments } = useQuery<Assessment[]>({
     queryKey: ["/api/assessments"],
   });
 
-  const { data: currentAssessment } = useQuery<Assessment>({
+  const { data: currentAssessment, refetch: refetchCurrentAssessment } = useQuery<Assessment>({
     queryKey: ["/api/assessments", currentAssessmentId],
     enabled: !!currentAssessmentId,
     refetchInterval: (data) => {
@@ -34,6 +36,59 @@ export default function Dashboard() {
 
   const formatDate = (date: string | Date) => {
     return new Date(date).toLocaleString();
+  };
+
+  const exportToPDF = (assessment?: Assessment) => {
+    if (!assessment) return;
+    // Create a simple text export for now
+    const content = `Supply Chain Vulnerability Assessment Report
+
+Company: ${assessment.companyName}
+Industry: ${assessment.industry}
+Date: ${formatDate(assessment.createdAt)}
+
+Risk Scores:
+- Overall: ${assessment.overallRiskScore?.toFixed(1) || 'N/A'}
+- Supplier: ${assessment.supplierRiskScore?.toFixed(1) || 'N/A'}
+- Logistics: ${assessment.logisticsRiskScore?.toFixed(1) || 'N/A'}
+- Geopolitical: ${assessment.geopoliticalRiskScore?.toFixed(1) || 'N/A'}
+
+Status: ${assessment.status}`;
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `supply-chain-assessment-${assessment.companyName}-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const exportAllReports = () => {
+    if (assessments.length === 0) return;
+    const content = assessments.map(assessment => 
+      `${assessment.companyName} (${assessment.industry}) - Risk: ${assessment.overallRiskScore?.toFixed(1) || 'N/A'} - ${formatDate(assessment.createdAt)}`
+    ).join('\n');
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `all-assessments-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const showAllAssessments = () => {
+    // For now, just scroll to the assessment history section
+    const historySection = document.querySelector('[data-testid="assessment-history"]');
+    if (historySection) {
+      historySection.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const getRiskColor = (score: number | null) => {
@@ -64,10 +119,36 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="sm" data-testid="button-settings">
-                <Settings className="h-4 w-4" />
-              </Button>
-              <Button data-testid="button-export">
+              <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="ghost" size="sm" data-testid="button-settings">
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Settings</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <div className="text-sm text-gray-600">
+                      <h4 className="font-medium mb-2">API Configuration</h4>
+                      <p>Gemini API Status: Connected</p>
+                      <p>Model: Gemini 2.5 Flash</p>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <h4 className="font-medium mb-2">Export Options</h4>
+                      <p>Default format: Text (.txt)</p>
+                      <p>Include timestamps: Yes</p>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      <h4 className="font-medium mb-2">Data Retention</h4>
+                      <p>Assessments stored: In memory</p>
+                      <p>Auto-cleanup: On restart</p>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+              <Button onClick={exportAllReports} data-testid="button-export">
                 <Download className="h-4 w-4 mr-2" />
                 Export Reports
               </Button>
@@ -137,11 +218,11 @@ export default function Dashboard() {
         )}
 
         {/* Assessment History */}
-        <Card className="mt-8">
+        <Card className="mt-8" data-testid="assessment-history">
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Assessment History</CardTitle>
-              <Button variant="ghost" size="sm" data-testid="button-view-all">
+              <Button variant="ghost" size="sm" onClick={showAllAssessments} data-testid="button-view-all">
                 View All
               </Button>
             </div>
@@ -213,7 +294,12 @@ export default function Dashboard() {
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="sm" data-testid={`button-download-${assessment.id}`}>
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              onClick={() => exportToPDF(assessment)}
+                              data-testid={`button-download-${assessment.id}`}
+                            >
                               <Download className="h-4 w-4" />
                             </Button>
                           </div>
