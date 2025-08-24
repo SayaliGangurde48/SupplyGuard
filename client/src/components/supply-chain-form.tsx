@@ -27,7 +27,7 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
   ]);
 
   const form = useForm<AssessmentInput>({
-    resolver: zodResolver(assessmentInputSchema),
+    resolver: zodResolver(assessmentInputSchema.omit({ suppliers: true })), // Validate suppliers separately
     defaultValues: {
       companyName: "",
       industry: "",
@@ -66,7 +66,29 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
   });
 
   const onSubmit = (data: AssessmentInput) => {
+    // Validate suppliers manually since they're in separate state
+    if (suppliers.length === 0) {
+      toast({
+        title: "Validation Error",
+        description: "At least one supplier is required.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Check if all suppliers have required fields
+    const incompleteSuppliers = suppliers.filter(s => !s.name || !s.location || !s.products);
+    if (incompleteSuppliers.length > 0) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all supplier information (name, location, and products).",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     const formData = { ...data, suppliers };
+    console.log("Submitting assessment data:", formData);
     createAssessmentMutation.mutate(formData);
   };
 
