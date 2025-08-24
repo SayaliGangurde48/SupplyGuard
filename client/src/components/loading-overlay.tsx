@@ -5,11 +5,11 @@ export default function LoadingOverlay() {
   const [currentStage, setCurrentStage] = useState(0);
 
   const stages = [
-    { progress: 20, text: 'Validating supply chain data...' },
-    { progress: 40, text: 'Sending data to Gemini API...' },
-    { progress: 60, text: 'AI analyzing vulnerabilities...' },
-    { progress: 80, text: 'Generating recommendations...' },
-    { progress: 100, text: 'Finalizing assessment report...' }
+    { progress: 25, text: 'Validating supply chain data...' },
+    { progress: 50, text: 'Sending to Gemini 2.5 Flash...' },
+    { progress: 75, text: 'AI analyzing vulnerabilities...' },
+    { progress: 90, text: 'Generating recommendations...' },
+    { progress: 100, text: 'Analysis complete!' }
   ];
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function LoadingOverlay() {
       } else {
         clearInterval(interval);
       }
-    }, 1500);
+    }, 800);
 
     return () => clearInterval(interval);
   }, [currentStage, stages]);

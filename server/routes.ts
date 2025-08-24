@@ -118,11 +118,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 }
 
 async function processAssessmentAsync(assessmentId: string, assessmentData: any) {
+  const startTime = Date.now();
   try {
+    console.log(`Starting AI analysis for assessment ${assessmentId}`);
+    
     // Update status to processing
     await storage.updateAssessment(assessmentId, { status: "processing" });
     
-    // Analyze with Gemini
+    // Analyze with Gemini (optimized for speed)
     const analysisResult = await analyzeSupplyChainVulnerabilities(assessmentData);
     
     // Update with results
@@ -135,6 +138,9 @@ async function processAssessmentAsync(assessmentId: string, assessmentData: any)
       vulnerabilities: analysisResult.vulnerabilities,
       recommendations: analysisResult.recommendations,
     });
+    
+    const duration = Date.now() - startTime;
+    console.log(`AI analysis completed for ${assessmentId} in ${duration}ms`);
     
   } catch (error) {
     console.error("Assessment processing failed:", error);

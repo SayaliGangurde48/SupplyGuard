@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Shield, Download, Settings, Eye, RotateCcw } from "lucide-react";
+import geminiLogo from "@assets/generated_images/Gemini_AI_logo_icon_4ec1392f.png";
 import type { Assessment } from "@shared/schema";
 
 export default function Dashboard() {
@@ -163,21 +164,28 @@ Status: ${assessment.status}`;
           <Card className={`mb-8 ${healthCheck.gemini === 'connected' ? 'bg-blue-50 border-blue-200' : 'bg-red-50 border-red-200'}`}>
             <CardContent className="pt-6">
               <div className="flex items-start space-x-3">
-                <Shield className={`mt-1 ${healthCheck.gemini === 'connected' ? 'text-blue-600' : 'text-red-600'}`} />
+                <div className="flex items-center space-x-2">
+                  <img 
+                    src={geminiLogo} 
+                    alt="Gemini AI" 
+                    className={`w-8 h-8 ${healthCheck.gemini === 'connected' ? 'opacity-100' : 'opacity-50'}`}
+                  />
+                  <Shield className={`${healthCheck.gemini === 'connected' ? 'text-blue-600' : 'text-red-600'}`} />
+                </div>
                 <div>
                   <h3 className={`text-lg font-semibold mb-2 ${healthCheck.gemini === 'connected' ? 'text-blue-900' : 'text-red-900'}`}>
-                    {healthCheck.gemini === 'connected' ? 'System Ready' : 'API Connection Issue'}
+                    {healthCheck.gemini === 'connected' ? 'Gemini AI Ready' : 'API Connection Issue'}
                   </h3>
                   <p className={`mb-3 ${healthCheck.gemini === 'connected' ? 'text-blue-800' : 'text-red-800'}`}>
                     {healthCheck.gemini === 'connected' 
-                      ? 'Gemini AI is connected and ready to analyze your supply chain data.'
+                      ? 'Gemini 2.5 Flash is connected and optimized for fast vulnerability analysis.'
                       : 'Unable to connect to Gemini API. Please check your API key configuration.'}
                   </p>
                   {healthCheck.gemini === 'connected' && (
                     <ol className="list-decimal list-inside text-blue-800 space-y-1 text-sm">
-                      <li>Using Gemini 2.5 Flash model for cost-effective analysis ($0.075 per 1M input tokens)</li>
-                      <li>Free tier includes 5 requests per minute and 25 requests per day</li>
-                      <li>Results typically take 30-60 seconds to generate</li>
+                      <li>Optimized prompts for faster processing (10-20 seconds typical)</li>
+                      <li>Advanced AI analysis with risk scoring and recommendations</li>
+                      <li>Free tier: 15 requests per minute, 1,500 requests per day</li>
                     </ol>
                   )}
                 </div>

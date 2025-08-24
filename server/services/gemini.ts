@@ -92,62 +92,29 @@ export async function analyzeSupplyChainVulnerabilities(
 }
 
 function createAssessmentPrompt(data: AssessmentInput): string {
-  return `You are an expert supply chain risk analyst with decades of experience in identifying vulnerabilities and providing actionable recommendations. Analyze the following supply chain data and provide a comprehensive vulnerability assessment.
+  return `Analyze this supply chain for vulnerabilities and provide risk scores (0-10) and actionable recommendations.
 
-COMPANY INFORMATION:
-- Company: ${data.companyName}
-- Industry: ${data.industry}
+COMPANY: ${data.companyName} (${data.industry})
 
 SUPPLIERS:
 ${data.suppliers.map(supplier => 
-  `- ${supplier.name} (${supplier.location}, ${supplier.criticality} criticality): ${supplier.products}`
+  `- ${supplier.name} (${supplier.location}, ${supplier.criticality}): ${supplier.products}`
 ).join('\n')}
 
-LOGISTICS:
-- Routes: ${data.logisticsRoutes}
-- Transportation Methods: ${Object.entries(data.transportationMethods)
+LOGISTICS: ${data.logisticsRoutes}
+TRANSPORT: ${Object.entries(data.transportationMethods)
   .filter(([_, used]) => used)
   .map(([method]) => method)
   .join(', ')}
 
-KNOWN RISK FACTORS:
-${data.riskFactors}
+RISKS: ${data.riskFactors}
 
-Perform a thorough analysis considering:
-1. Single points of failure in the supplier network
-2. Geographic concentration risks
-3. Geopolitical instability in supplier regions
-4. Transportation vulnerabilities and bottlenecks
-5. Industry-specific risks and regulations
-6. Financial stability concerns
-7. Cybersecurity and data protection risks
-8. Natural disaster and climate change impacts
-9. Market volatility and economic factors
-10. Compliance and regulatory risks
+Provide:
+1. Risk scores (0-10): overall, supplier, logistics, geopolitical
+2. Top 3-4 vulnerabilities: title, description, severity (HIGH/MEDIUM/LOW), score, timeline, cost
+3. Top 3-4 recommendations: title, description, priority (Critical/High/Medium/Low), timeline
 
-Provide risk scores from 0-10 (where 10 is highest risk) for:
-- Overall risk score (weighted average)
-- Supplier risk (concentration, reliability, alternatives)
-- Logistics risk (routes, methods, disruption potential)
-- Geopolitical risk (stability, trade relations, sanctions)
-
-Identify the top 3-5 most critical vulnerabilities with:
-- Clear, actionable titles
-- Detailed descriptions explaining the risk
-- Severity levels (HIGH/MEDIUM/LOW)
-- Numerical risk scores (0-10)
-- Impact timelines (immediate, days, weeks, months)
-- Potential cost ranges in USD
-
-Provide 3-5 prioritized recommendations with:
-- Specific, actionable titles
-- Detailed implementation descriptions
-- Realistic timelines for implementation
-- Priority levels (Critical/High/Medium/Low)
-
-Generate unique IDs for vulnerabilities and recommendations (format: vuln_001, rec_001, etc.).
-
-Focus on practical, implementable solutions that address the highest-impact risks first. Consider both short-term mitigation strategies and long-term resilience building.`;
+Use IDs: vuln_001, rec_001, etc. Be concise but actionable.`;
 }
 
 export async function checkGeminiApiHealth(): Promise<boolean> {
