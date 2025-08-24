@@ -1,72 +1,62 @@
-Supply Guard – AI-Powered Supply Chain Vulnerability Assessment
+🌍 SUPPLY GUARD – AI-Powered Supply Chain Vulnerability Assessment
 
-🚀 Supply Guard is a smart AI-powered platform that analyzes global supply chain vulnerabilities in the transportation and security domain.
-It simulates potential risks, detects fraud, and provides actionable insights for building resilient, sustainable, and secure supply chains.
+🚀 Supply Guard is an AI-driven platform that protects global supply chains by identifying vulnerabilities in transportation & security.
+It detects fraud, delays, and risks, then recommends sustainable & economical strategies to make supply chains resilient and future-proof.
 
-🌐 Live Prototype: https://supply-guard-hackwave.replit.app/
+🌐 Live Prototype: 👉 https://supply-guard-hackwave.replit.app/
 
-✨ Features
+✨ Key Features
 
-🔎 Vulnerability Detection – Identifies risks like fake delivery receipts, billing discrepancies, and transport delays.
+🔎 Smart Vulnerability Detection → Finds fake receipts, billing fraud, & transport risks.
 
-🛰 Real-time Monitoring – Tracks transportation and security risks dynamically.
+🛰 Real-Time Monitoring → Tracks delays, route risks & security threats.
 
-📊 Interactive Dashboard – Visualizes risk factors, fraud patterns, and disruptions.
+📊 Interactive Dashboard → Easy-to-read graphs & insights for quick action.
 
-🤖 AI Recommendations – Suggests preventive and recovery strategies.
+🤖 AI-Powered Suggestions → Gives recovery & prevention strategies.
 
-✅ Sustainable & Economical Impact – Supports UN SDGs (Goal 9: Industry, Innovation, and Infrastructure & Goal 12: Responsible Consumption and Production).
+🌱 Sustainable & Economical → Aligned with UN SDGs (Goal 9 & Goal 12).
 
 🛠 Tech Stack
 
-Frontend: HTML, CSS, JavaScript (Replit-hosted UI)
-
-Backend: Python (Flask/FastAPI)
-
-Database: SQLite / JSON for prototype
-
-AI/ML: Rule-based + anomaly detection models (extendable)
-
-Deployment: Replit
+💻 Frontend → HTML, CSS, JavaScript (Replit-based UI)
+⚙️ Backend → Python (Flask / FastAPI)
+🗄 Database → SQLite / JSON (for prototype)
+🧠 AI/ML → Rule-based + anomaly detection models
+☁️ Deployment → Replit
 
 🚀 Getting Started (Run Locally)
 
-Clone this repository:
+1️⃣ Clone this repository
 
 git clone https://github.com/<your-username>/supply-guard.git
 cd supply-guard
 
 
-Install dependencies:
+2️⃣ Install dependencies
 
 pip install -r requirements.txt
 
 
-Run the app:
+3️⃣ Run the app
 
 python app.py
 
 
-Open in browser:
+4️⃣ Open in browser
 
 http://127.0.0.1:5000/
 
 📌 Use Cases
 
-🏭 Manufacturers – Detect weak points in raw material sourcing.
-
-🚚 Logistics Providers – Prevent transport fraud and route vulnerabilities.
-
-🛡 Governments – Ensure national security in supply chain systems.
-
-📦 E-commerce – Detect delivery fraud and optimize risk management.
+🏭 Manufacturers → Secure raw material sourcing.
+🚚 Logistics Providers → Detect transport fraud & risks.
+🛡 Governments → Ensure supply chain security.
+📦 E-commerce → Stop delivery fraud & optimize risk mgmt.
 
 🎯 Future Scope
 
-Integration with real-time APIs (weather, geopolitics, shipping data).
-
-AI-based predictive analytics for disruptions.
-
-Blockchain for tamper-proof delivery records.
-
-Mobile app for instant alerts.
+✨ Real-time APIs (weather, geopolitics, shipping).
+✨ AI predictive analytics for disruptions.
+✨ Blockchain for tamper-proof delivery records.
+✨ Mobile App for instant alerts.
