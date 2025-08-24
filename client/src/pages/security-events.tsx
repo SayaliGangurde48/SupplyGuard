@@ -62,11 +62,26 @@ export default function SecurityEventsPage() {
             </div>
             
             <div className="flex space-x-3">
-              <Button className="bg-red-500 hover:bg-red-600 text-white" data-testid="button-trigger-event">
+              <Button 
+                onClick={() => {
+                  // Trigger security event functionality here
+                  console.log('Triggering security event simulation');
+                }}
+                className="bg-red-500 hover:bg-red-600 text-white" 
+                data-testid="button-trigger-event"
+              >
                 <Shield className="h-4 w-4 mr-2" />
                 Trigger Security Event
               </Button>
-              <Button variant="outline" className="border-blue-500 text-blue-600 hover:bg-blue-50" data-testid="button-check-weather">
+              <Button 
+                onClick={() => {
+                  // Check weather alert functionality here
+                  console.log('Checking weather alerts');
+                }}
+                variant="outline" 
+                className="border-blue-500 text-blue-600 hover:bg-blue-50" 
+                data-testid="button-check-weather"
+              >
                 <Cloud className="h-4 w-4 mr-2" />
                 Check Weather Alert
               </Button>
