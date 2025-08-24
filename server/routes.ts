@@ -113,6 +113,126 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Trigger security event endpoint
+  app.post("/api/security/trigger-event", async (req, res) => {
+    try {
+      const securityEvents = [
+        {
+          id: Date.now().toString(),
+          title: "Customs Security Tightened at Port Shanghai",
+          location: "Port Shanghai, China",
+          severity: "High",
+          duration: "12 days",
+          inspectionRate: "35%",
+          clearanceTime: "×2.1",
+          confidence: "85%",
+          description: "Enhanced security protocols implemented due to geopolitical tensions",
+          timestamp: new Date().toISOString()
+        },
+        {
+          id: Date.now().toString(),
+          title: "Port Strike Negotiations at Rotterdam",
+          location: "Rotterdam Port, Netherlands",
+          severity: "Medium",
+          duration: "7 days",
+          inspectionRate: "15%",
+          clearanceTime: "×1.3",
+          confidence: "70%",
+          description: "Labor union negotiations affecting port operations",
+          timestamp: new Date().toISOString()
+        },
+        {
+          id: Date.now().toString(),
+          title: "Cyber Security Breach Detection",
+          location: "Los Angeles Port, USA",
+          severity: "Critical",
+          duration: "5 days",
+          inspectionRate: "50%",
+          clearanceTime: "×3.0",
+          confidence: "95%",
+          description: "Potential cyber threat detected in port management systems",
+          timestamp: new Date().toISOString()
+        }
+      ];
+      
+      // Select a random event
+      const randomEvent = securityEvents[Math.floor(Math.random() * securityEvents.length)];
+      
+      res.json({
+        success: true,
+        message: "Security event triggered successfully",
+        event: randomEvent
+      });
+    } catch (error) {
+      console.error("Failed to trigger security event:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to trigger security event",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Check weather alert endpoint
+  app.get("/api/security/weather-alert", async (req, res) => {
+    try {
+      const weatherAlerts = [
+        {
+          id: Date.now().toString(),
+          type: "Typhoon Warning",
+          location: "South China Sea",
+          severity: "High",
+          affectedPorts: ["Hong Kong", "Shanghai", "Ningbo"],
+          duration: "72 hours",
+          windSpeed: "150 km/h",
+          visibility: "< 500m",
+          recommendation: "All maritime operations suspended",
+          timestamp: new Date().toISOString()
+        },
+        {
+          id: Date.now().toString(),
+          type: "Fog Advisory",
+          location: "North Atlantic",
+          severity: "Medium",
+          affectedPorts: ["New York", "Boston", "Halifax"],
+          duration: "24 hours",
+          windSpeed: "25 km/h",
+          visibility: "< 200m",
+          recommendation: "Reduced vessel speed, enhanced navigation",
+          timestamp: new Date().toISOString()
+        },
+        {
+          id: Date.now().toString(),
+          type: "Storm Warning",
+          location: "Mediterranean Sea",
+          severity: "Medium",
+          affectedPorts: ["Barcelona", "Marseille", "Naples"],
+          duration: "48 hours",
+          windSpeed: "85 km/h",
+          visibility: "1-2 km",
+          recommendation: "Monitor vessel schedules, potential delays",
+          timestamp: new Date().toISOString()
+        }
+      ];
+      
+      // Select a random weather alert
+      const randomAlert = weatherAlerts[Math.floor(Math.random() * weatherAlerts.length)];
+      
+      res.json({
+        success: true,
+        message: "Weather alert retrieved successfully",
+        alert: randomAlert
+      });
+    } catch (error) {
+      console.error("Failed to check weather alert:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to check weather alert",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
