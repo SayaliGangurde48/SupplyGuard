@@ -7,6 +7,7 @@ import AssessmentStatus from "@/components/assessment-status";
 import LoadingOverlay from "@/components/loading-overlay";
 import RealTimeClock from "@/components/real-time-clock";
 import InteractiveWorldMap from "@/components/interactive-world-map";
+import GlobalAlertsPanel from "@/components/global-alerts-panel";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Assessment } from "@shared/schema";
@@ -71,7 +72,7 @@ export default function MainDashboard() {
           </Card>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Supply Chain Form */}
           <div className="lg:col-span-2">
             <SupplyChainForm 
@@ -89,6 +90,11 @@ export default function MainDashboard() {
               assessment={currentAssessment}
               healthCheck={healthCheck}
             />
+          </div>
+
+          {/* Global Alerts Panel */}
+          <div className="lg:col-span-1">
+            <GlobalAlertsPanel />
           </div>
         </div>
 

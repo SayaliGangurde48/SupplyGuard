@@ -344,6 +344,58 @@ Analyze and return JSON with risk factors, scores (0-100), and explanations:
     }
   });
 
+  // Mock Global Alerts endpoint
+  app.get("/api/global-alerts", async (req, res) => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Mock alerts data
+    const mockAlerts = [
+      {
+        id: 'live-1',
+        severity: 'Critical',
+        type: 'port',
+        headline: 'Shanghai Port congestion reaching critical levels',
+        description: 'Unprecedented cargo volume causing 4-6 day delays. Customs processing severely backlogged.',
+        source: 'Port Authority Shanghai',
+        timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+        suggestedAction: 'Immediate rerouting to Ningbo or Qingdao ports recommended'
+      },
+      {
+        id: 'live-2',
+        severity: 'Warning',
+        type: 'weather',
+        headline: 'Severe storm system approaching Pacific shipping lanes',
+        description: 'Major storm system with 80mph winds expected to impact trans-Pacific routes.',
+        source: 'NOAA Maritime Weather',
+        timestamp: new Date(Date.now() - 12 * 60 * 1000).toISOString(),
+        suggestedAction: 'Delay departures or reroute through southern corridors'
+      },
+      {
+        id: 'live-3',
+        severity: 'Critical',
+        type: 'strike',
+        headline: 'Port workers strike escalates at European terminals',
+        description: 'Strike action spreads to Rotterdam and Hamburg, affecting 60% of container operations.',
+        source: 'European Transport Workers',
+        timestamp: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
+        suggestedAction: 'Consider alternative ports in UK or Mediterranean'
+      },
+      {
+        id: 'live-4',
+        severity: 'Info',
+        type: 'port',
+        headline: 'Singapore Port unveils AI-powered cargo tracking',
+        description: 'New system promises 40% faster container processing and real-time visibility.',
+        source: 'PSA Singapore',
+        timestamp: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+        suggestedAction: 'Leverage new tracking features for improved supply chain visibility'
+      }
+    ];
+    
+    res.json(mockAlerts);
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
