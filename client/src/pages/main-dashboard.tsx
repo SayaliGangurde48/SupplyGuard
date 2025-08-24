@@ -6,6 +6,7 @@ import AssessmentResults from "@/components/assessment-results";
 import AssessmentStatus from "@/components/assessment-status";
 import LoadingOverlay from "@/components/loading-overlay";
 import RealTimeClock from "@/components/real-time-clock";
+import InteractiveWorldMap from "@/components/interactive-world-map";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Assessment } from "@shared/schema";
@@ -52,6 +53,9 @@ export default function MainDashboard() {
       </div>
 
       <div className="p-6 space-y-6">
+        {/* Interactive World Map */}
+        <InteractiveWorldMap />
+
         {/* API Status */}
         {healthCheck && healthCheck.gemini === 'connected' && (
           <Card className="bg-blue-50 border-blue-200">
