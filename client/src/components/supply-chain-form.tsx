@@ -12,7 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { assessmentInputSchema, type AssessmentInput, type Supplier } from "@shared/schema";
-import { Building, Users, Route, AlertTriangle, Plus, RotateCcw, Brain } from "lucide-react";
+import { Building, Users, Route, AlertTriangle, Plus, RotateCcw, Brain, Sparkles, Zap } from "lucide-react";
 
 interface SupplyChainFormProps {
   onAssessmentCreated: (id: string) => void;
@@ -25,6 +25,9 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
   const [suppliers, setSuppliers] = useState<Supplier[]>([
     { name: "", location: "", criticality: "Medium", products: "" }
   ]);
+  const [aiLoadingSuppliers, setAiLoadingSuppliers] = useState<number | null>(null);
+  const [aiLoadingRisks, setAiLoadingRisks] = useState(false);
+  const [detectedRisks, setDetectedRisks] = useState<Array<{name: string, score: number, explanation: string, checked: boolean}>>([]);
 
   const form = useForm<AssessmentInput>({
     resolver: zodResolver(assessmentInputSchema.omit({ suppliers: true })), // Validate suppliers separately
@@ -108,9 +111,92 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
     }
   };
 
+  // AI Fill Suppliers Handler
+  const handleAiFillSupplier = async (index: number) => {
+    const supplier = suppliers[index];
+    if (!supplier.name || !supplier.location) return;
+    
+    setAiLoadingSuppliers(index);
+    try {
+      const response = await apiRequest('POST', '/api/ai/fill-suppliers', {
+        companyName: form.getValues('companyName'),
+        industry: form.getValues('industry'),
+        supplierName: supplier.name,
+        location: supplier.location
+      });
+      
+      const data = await response.json();
+      if (data.success && data.suggestions) {
+        const newSuppliers = [...suppliers];
+        newSuppliers[index] = {
+          ...newSuppliers[index],
+          products: data.suggestions.products,
+          criticality: data.suggestions.criticality as "High" | "Medium" | "Low"
+        };
+        setSuppliers(newSuppliers);
+        
+        toast({
+          title: "AI Suggestions Applied",
+          description: `Filled products and criticality for ${supplier.name}. Reasoning: ${data.suggestions.reasoning}`,
+          variant: "default"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "AI Fill Failed",
+        description: "Could not generate supplier suggestions. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setAiLoadingSuppliers(null);
+    }
+  };
+
+  // Auto-detect Risks Handler
+  const handleAutoDetectRisks = async () => {
+    setAiLoadingRisks(true);
+    try {
+      const formValues = form.getValues();
+      const response = await apiRequest('POST', '/api/ai/detect-risks', {
+        companyName: formValues.companyName,
+        industry: formValues.industry,
+        suppliers: suppliers,
+        logisticsRoutes: formValues.logisticsRoutes,
+        transportationMethods: formValues.transportationMethods
+      });
+      
+      const data = await response.json();
+      if (data.success && data.riskFactors) {
+        setDetectedRisks(data.riskFactors);
+        
+        // Auto-check high-risk factors
+        const highRiskFactors = data.riskFactors.filter((r: any) => r.score >= 70 && r.checked);
+        if (highRiskFactors.length > 0) {
+          const riskNames = highRiskFactors.map((r: any) => r.name).join(', ');
+          form.setValue('riskFactors', riskNames);
+        }
+        
+        toast({
+          title: "AI Risk Detection Complete",
+          description: `Detected ${data.riskFactors.length} potential risk factors. Review and select applicable ones.`,
+          variant: "default"
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Auto-detect Failed",
+        description: "Could not detect risk factors. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setAiLoadingRisks(false);
+    }
+  };
+
   const resetForm = () => {
     form.reset();
     setSuppliers([{ name: "", location: "", criticality: "Medium", products: "" }]);
+    setDetectedRisks([]);
   };
 
   return (
@@ -368,19 +454,38 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
                           </div>
                         </div>
                       </div>
-                      {suppliers.length > 1 && (
-                        <div className="mt-3 flex justify-end">
+                      
+                      {/* AI Fill Button */}
+                      <div className="mt-4 pt-3 border-t border-gray-200">
+                        <div className="flex items-center justify-between">
                           <Button
                             type="button"
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
-                            onClick={() => removeSupplier(index)}
-                            data-testid={`button-remove-supplier-${index}`}
+                            onClick={() => handleAiFillSupplier(index)}
+                            disabled={aiLoadingSuppliers === index || !supplier.name || !supplier.location}
+                            className="text-blue-600 border-blue-200 hover:bg-blue-50"
+                            data-testid={`button-ai-fill-${index}`}
                           >
-                            Remove
+                            <Sparkles className="h-4 w-4 mr-2" />
+                            {aiLoadingSuppliers === index ? "AI Analyzing..." : "AI Fill"}
                           </Button>
+                          {suppliers.length > 1 && (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => removeSupplier(index)}
+                              data-testid={`button-remove-supplier-${index}`}
+                            >
+                              Remove
+                            </Button>
+                          )}
                         </div>
-                      )}
+                        {(!supplier.name || !supplier.location) && (
+                          <p className="text-xs text-gray-500 mt-1">Enter supplier name and location first</p>
+                        )}
+                      </div>
                     </CardContent>
                   </Card>
                 ))}
@@ -511,10 +616,24 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
 
             {/* Risk Factors */}
             <div>
-              <h3 className="text-lg font-medium text-gray-900 mb-4 flex items-center">
-                <AlertTriangle className="text-primary mr-2 h-5 w-5" />
-                Known Risk Factors
-              </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-medium text-gray-900 flex items-center">
+                  <AlertTriangle className="text-primary mr-2 h-5 w-5" />
+                  Known Risk Factors
+                </h3>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAutoDetectRisks}
+                  disabled={aiLoadingRisks}
+                  className="text-purple-600 border-purple-200 hover:bg-purple-50"
+                  data-testid="button-auto-detect-risks"
+                >
+                  <Zap className="h-4 w-4 mr-2" />
+                  {aiLoadingRisks ? "AI Detecting..." : "Auto-detect Risks"}
+                </Button>
+              </div>
               <FormField
                 control={form.control}
                 name="riskFactors"
@@ -523,6 +642,45 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
                     <FormLabel>Select applicable risk factors (check all that apply)</FormLabel>
                     <FormControl>
                       <div className="space-y-3 mt-2">
+                        {/* AI Detected Risks */}
+                        {detectedRisks.length > 0 && (
+                          <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg">
+                            <h4 className="font-medium text-purple-900 mb-2 flex items-center">
+                              <Sparkles className="h-4 w-4 mr-1" />
+                              AI-Detected Risks
+                            </h4>
+                            <div className="space-y-2">
+                              {detectedRisks.map((risk, idx) => (
+                                <div key={idx} className="flex items-start space-x-2">
+                                  <Checkbox 
+                                    checked={risk.checked}
+                                    onCheckedChange={(checked) => {
+                                      const updatedRisks = [...detectedRisks];
+                                      updatedRisks[idx].checked = !!checked;
+                                      setDetectedRisks(updatedRisks);
+                                      
+                                      // Update form value
+                                      const checkedRisks = updatedRisks.filter(r => r.checked).map(r => r.name).join(', ');
+                                      const otherRisks = field.value?.split(', ').filter(r => !detectedRisks.some(dr => dr.name === r)) || [];
+                                      field.onChange([...otherRisks, ...updatedRisks.filter(r => r.checked).map(r => r.name)].filter(Boolean).join(', '));
+                                    }}
+                                    data-testid={`checkbox-ai-risk-${idx}`}
+                                  />
+                                  <div className="flex-1">
+                                    <span className="text-sm font-medium">{risk.name}</span>
+                                    <div className="flex items-center space-x-2 mt-1">
+                                      <div className={`text-xs px-2 py-1 rounded ${risk.score >= 70 ? 'bg-red-100 text-red-700' : risk.score >= 40 ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}`}>
+                                        Risk: {risk.score}%
+                                      </div>
+                                    </div>
+                                    <p className="text-xs text-gray-600 mt-1">{risk.explanation}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        
                         {/* Predefined Risk Factors as Checkboxes */}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <label className="flex items-center space-x-2">

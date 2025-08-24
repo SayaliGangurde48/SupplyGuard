@@ -2,6 +2,11 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { analyzeSupplyChainVulnerabilities, checkGeminiApiHealth } from "./services/gemini";
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ 
+  apiKey: process.env.GEMINI_API_KEY || ""
+});
 import { assessmentInputSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 
@@ -228,6 +233,112 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({
         success: false,
         message: "Failed to check weather alert",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // AI Fill Suppliers endpoint
+  app.post("/api/ai/fill-suppliers", async (req, res) => {
+    try {
+      const { companyName, industry, supplierName, location } = req.body;
+      
+      const prompt = `Company: ${companyName}, Industry: ${industry}. For supplier "${supplierName}" in "${location}", suggest:
+1. 3-5 relevant products/services they likely provide
+2. Criticality level (High/Medium/Low) with reasoning
+3. Brief explanation why this criticality level
+
+Return JSON: {"products": ["product1", "product2"], "criticality": "High", "reasoning": "brief explanation"}`;
+      
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "object",
+            properties: {
+              products: { type: "array", items: { type: "string" } },
+              criticality: { type: "string", enum: ["High", "Medium", "Low"] },
+              reasoning: { type: "string" }
+            },
+            required: ["products", "criticality", "reasoning"]
+          }
+        },
+        contents: prompt
+      });
+      
+      const data = JSON.parse(response.text || '{}');
+      res.json({
+        success: true,
+        suggestions: {
+          products: data.products?.join(', ') || '',
+          criticality: data.criticality || 'Medium',
+          reasoning: data.reasoning || 'AI analysis based on industry standards'
+        }
+      });
+    } catch (error) {
+      console.error("AI Fill Suppliers failed:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to generate supplier suggestions",
+        error: error instanceof Error ? error.message : "Unknown error"
+      });
+    }
+  });
+
+  // Auto-detect Risks endpoint  
+  app.post("/api/ai/detect-risks", async (req, res) => {
+    try {
+      const { companyName, industry, suppliers, logisticsRoutes, transportationMethods } = req.body;
+      
+      const supplierInfo = suppliers?.map((s: any) => `${s.name} in ${s.location}`)?.join(', ') || 'No suppliers specified';
+      const transportInfo = Object.entries(transportationMethods || {}).filter(([_, used]) => used).map(([method]) => method).join(', ') || 'No transport specified';
+      
+      const prompt = `Risk analysis for ${industry} company "${companyName}":
+- Suppliers: ${supplierInfo}
+- Routes: ${logisticsRoutes || 'Not specified'}
+- Transport: ${transportInfo}
+
+Analyze and return JSON with risk factors, scores (0-100), and explanations:
+{"riskFactors": [{"name": "Risk Name", "score": 75, "explanation": "Why this risk exists", "checked": true}]}`;
+      
+      const response = await ai.models.generateContent({
+        model: "gemini-2.5-flash",
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "object",
+            properties: {
+              riskFactors: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    name: { type: "string" },
+                    score: { type: "number" },
+                    explanation: { type: "string" },
+                    checked: { type: "boolean" }
+                  },
+                  required: ["name", "score", "explanation", "checked"]
+                }
+              }
+            },
+            required: ["riskFactors"]
+          }
+        },
+        contents: prompt
+      });
+      
+      const data = JSON.parse(response.text || '{}');
+      res.json({
+        success: true,
+        riskFactors: data.riskFactors || []
+      });
+    } catch (error) {
+      console.error("Auto-detect Risks failed:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to detect risk factors",
         error: error instanceof Error ? error.message : "Unknown error"
       });
     }
