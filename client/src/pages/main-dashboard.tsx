@@ -35,7 +35,7 @@ export default function MainDashboard() {
   });
 
   return (
-    <div className="flex-1 flex flex-col min-h-0">
+    <div className="flex-1 overflow-y-auto">
       {/* Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
@@ -53,7 +53,7 @@ export default function MainDashboard() {
         </div>
       </div>
 
-      <div className="flex-1 p-6 space-y-6">
+      <div className="p-6 space-y-6">
         {/* Interactive World Map */}
         <InteractiveWorldMap />
 
@@ -155,7 +155,7 @@ export default function MainDashboard() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-gray-50 border-t border-gray-200 px-6 py-4 mt-auto">
+      <footer className="bg-gray-50 border-t border-gray-200 px-6 py-4 mt-8">
         <div className="text-center text-sm text-gray-500">
           © 2025 All rights reserved Supply Chain Guardian
         </div>
