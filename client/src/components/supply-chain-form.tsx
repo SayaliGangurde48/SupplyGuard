@@ -143,7 +143,7 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
                     <FormItem>
                       <FormLabel>Company Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="TechCorp Industries" {...field} data-testid="input-company-name" />
+                        <Input placeholder="Enter your company name" {...field} data-testid="input-company-name" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -193,7 +193,7 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
                             Supplier Name
                           </label>
                           <Input
-                            placeholder="Global Components Ltd"
+                            placeholder="Enter supplier name"
                             value={supplier.name}
                             onChange={(e) => updateSupplier(index, "name", e.target.value)}
                             data-testid={`input-supplier-name-${index}`}
