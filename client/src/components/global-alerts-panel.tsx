@@ -152,13 +152,20 @@ export default function GlobalAlertsPanel() {
       }
       try {
         const response = await apiRequest('GET', '/api/global-alerts');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         return await response.json();
       } catch (err) {
-        throw new Error('Failed to fetch alerts');
+        console.error('Failed to fetch global alerts:', err);
+        // Return mock data as fallback instead of throwing
+        return mockAlerts;
       }
     },
     refetchInterval: 60000, // Poll every 60 seconds
     retry: 1,
+    retryOnMount: false,
+    refetchOnWindowFocus: false,
   });
 
   // Update alerts with deduplication
@@ -176,16 +183,20 @@ export default function GlobalAlertsPanel() {
   useEffect(() => {
     if (isPlaying && !isHovered && alerts.length > 0) {
       autoScrollRef.current = setInterval(() => {
-        if (scrollContainerRef.current) {
-          const container = scrollContainerRef.current;
-          const scrollAmount = 60; // Height of one alert item
-          
-          if (container.scrollTop + container.clientHeight >= container.scrollHeight - scrollAmount) {
-            // Reset to top when reached bottom
-            container.scrollTop = 0;
-          } else {
-            container.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+        try {
+          if (scrollContainerRef.current) {
+            const container = scrollContainerRef.current;
+            const scrollAmount = 60; // Height of one alert item
+            
+            if (container.scrollTop + container.clientHeight >= container.scrollHeight - scrollAmount) {
+              // Reset to top when reached bottom
+              container.scrollTop = 0;
+            } else {
+              container.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+            }
           }
+        } catch (err) {
+          console.error('Auto-scroll error:', err);
         }
       }, 4000); // Scroll every 4 seconds
     }
@@ -193,6 +204,7 @@ export default function GlobalAlertsPanel() {
     return () => {
       if (autoScrollRef.current) {
         clearInterval(autoScrollRef.current);
+        autoScrollRef.current = null;
       }
     };
   }, [isPlaying, isHovered, alerts.length]);
@@ -205,7 +217,11 @@ export default function GlobalAlertsPanel() {
   }, [fetchedAlerts, isLoading]);
 
   const handleRefresh = () => {
-    refetch();
+    try {
+      refetch();
+    } catch (err) {
+      console.error('Failed to refresh alerts:', err);
+    }
   };
 
   const handleUseMockData = () => {
