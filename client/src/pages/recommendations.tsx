@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plane, Shield, Package, Route, Truck, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import RealTimeClock from '@/components/real-time-clock';
 import type { Assessment } from '@shared/schema';
 
 export default function RecommendationsPage() {
@@ -237,7 +238,7 @@ End of Plan`;
             <div className="flex items-center space-x-2 text-sm">
               <div className="h-2 w-2 bg-green-500 rounded-full"></div>
               <span className="text-green-600 font-medium">LIVE</span>
-              <span className="text-gray-500">{new Date().toLocaleTimeString()}</span>
+              <RealTimeClock className="text-gray-500" showSeconds={true} />
             </div>
           </div>
         </div>

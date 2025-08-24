@@ -6,6 +6,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Play, RotateCcw, TrendingUp, AlertTriangle, Target } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import RealTimeClock from '@/components/real-time-clock';
 
 export default function ScenarioLabPage() {
   const [isSimulating, setIsSimulating] = useState(false);
@@ -249,7 +250,7 @@ export default function ScenarioLabPage() {
             <div className="flex items-center space-x-2 text-sm">
               <div className="h-2 w-2 bg-green-500 rounded-full"></div>
               <span className="text-green-600 font-medium">LIVE</span>
-              <span className="text-gray-500">{new Date().toLocaleTimeString()}</span>
+              <RealTimeClock className="text-gray-500" showSeconds={true} />
             </div>
           </div>
         </div>

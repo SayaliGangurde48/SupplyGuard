@@ -5,6 +5,7 @@ import SupplyChainForm from "@/components/supply-chain-form";
 import AssessmentResults from "@/components/assessment-results";
 import AssessmentStatus from "@/components/assessment-status";
 import LoadingOverlay from "@/components/loading-overlay";
+import RealTimeClock from "@/components/real-time-clock";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { Assessment } from "@shared/schema";
@@ -44,7 +45,7 @@ export default function MainDashboard() {
             <div className="flex items-center space-x-2 text-sm">
               <div className="h-2 w-2 bg-green-500 rounded-full"></div>
               <span className="text-green-600 font-medium">LIVE</span>
-              <span className="text-gray-500">8:37:08 am</span>
+              <RealTimeClock className="text-gray-500" showSeconds={true} />
             </div>
           </div>
         </div>
