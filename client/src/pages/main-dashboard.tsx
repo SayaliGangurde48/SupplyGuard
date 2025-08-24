@@ -154,6 +154,13 @@ export default function MainDashboard() {
         </Card>
       </div>
 
+      {/* Footer */}
+      <footer className="bg-gray-50 border-t border-gray-200 px-6 py-4 mt-8">
+        <div className="text-center text-sm text-gray-500">
+          © 2025 All rights reserved Supply Chain Guardian
+        </div>
+      </footer>
+
       {isProcessing && <LoadingOverlay />}
     </div>
   );
