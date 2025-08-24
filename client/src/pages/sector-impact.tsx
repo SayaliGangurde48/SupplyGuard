@@ -10,7 +10,7 @@ export default function SectorImpactPage() {
       name: 'Retail',
       icon: ShoppingCart,
       serviceAtRisk: '31.5%',
-      revenueAtRisk: '$5.1M',
+      revenueAtRisk: '₹42.5Cr',
       color: 'orange',
       priority: 'HIGH'
     },
@@ -18,7 +18,7 @@ export default function SectorImpactPage() {
       name: 'Automotive',
       icon: Car,
       serviceAtRisk: '42.0%',
-      revenueAtRisk: '$4.6M',
+      revenueAtRisk: '₹38.3Cr',
       color: 'red',
       priority: 'HIGH'
     },
@@ -26,7 +26,7 @@ export default function SectorImpactPage() {
       name: 'Healthcare',
       icon: Heart,
       serviceAtRisk: '24.5%',
-      revenueAtRisk: '$2.2M',
+      revenueAtRisk: '₹18.3Cr',
       color: 'green',
       priority: 'HIGH',
       special: 'PRIORITIZE'
@@ -37,7 +37,7 @@ export default function SectorImpactPage() {
     {
       sku: 'AUTO-ENG-001',
       sector: 'Automotive',
-      asp: '$4,250',
+      asp: '₹3,54,250',
       shortageRisk: 28,
       suggestedAction: 'Partial Air Freight',
       color: 'red'
@@ -45,7 +45,7 @@ export default function SectorImpactPage() {
     {
       sku: 'RET-ELEC-042',
       sector: 'Retail',
-      asp: '$850',
+      asp: '₹70,850',
       shortageRisk: 19,
       suggestedAction: 'Reroute via PUS',
       color: 'orange'
@@ -53,7 +53,7 @@ export default function SectorImpactPage() {
     {
       sku: 'HC-MED-078',
       sector: 'Healthcare',
-      asp: '$1,200',
+      asp: '₹1,00,200',
       shortageRisk: 15,
       suggestedAction: 'Pre-clearance',
       color: 'yellow'
@@ -61,7 +61,7 @@ export default function SectorImpactPage() {
     {
       sku: 'AUTO-ELEC-095',
       sector: 'Automotive',
-      asp: '$650',
+      asp: '₹54,150',
       shortageRisk: 32,
       suggestedAction: 'Buffer Stock',
       color: 'red'

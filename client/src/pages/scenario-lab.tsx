@@ -603,7 +603,7 @@ export default function ScenarioLabPage() {
                         <div className="bg-gray-50 rounded p-3">
                           <div className="flex justify-between items-center">
                             <span className="text-sm font-medium text-gray-700">Cost Impact:</span>
-                            <span className="font-bold text-red-600">${(results.costImpact / 1000).toFixed(0)}K</span>
+                            <span className="font-bold text-red-600">₹{((results.costImpact * 83) / 1000).toFixed(0)}K</span>
                           </div>
                           <div className="w-full bg-gray-200 rounded-full h-1 mt-2">
                             <div 
@@ -629,7 +629,7 @@ export default function ScenarioLabPage() {
                       </Button>
                       <Button 
                         onClick={() => {
-                          const summary = `SCENARIO SIMULATION RESULTS\n\nRisk Score: ${results.finalRiskScore.toFixed(1)}/10\nTimeline Impact: +${results.timelineImpact} days\nCost Impact: $${(results.costImpact/1000).toFixed(0)}K\nScenarios: ${results.scenarioCount}\n\nGenerated: ${new Date().toLocaleString()}`;
+                          const summary = `SCENARIO SIMULATION RESULTS\n\nRisk Score: ${results.finalRiskScore.toFixed(1)}/10\nTimeline Impact: +${results.timelineImpact} days\nCost Impact: ₹${((results.costImpact * 83)/1000).toFixed(0)}K\nScenarios: ${results.scenarioCount}\n\nGenerated: ${new Date().toLocaleString()}`;
                           const blob = new Blob([summary], { type: 'text/plain' });
                           const url = URL.createObjectURL(blob);
                           const a = document.createElement('a');
