@@ -374,7 +374,7 @@ export default function SecurityEventMonitor({ assessment }: SecurityEventMonito
             events.map((event) => {
               const severity = getEventSeverity(event);
               return (
-                <Card key={event.id} className={`bg-gray-800/80 border-gray-600 backdrop-blur-sm transition-all duration-300 ${severity.level === 'High' ? 'border-red-500/50' : severity.level === 'Medium' ? 'border-orange-500/50' : 'border-green-500/50'}`}>
+                <Card key={event.id} className="bg-gray-800/80 border-gray-600 backdrop-blur-sm transition-all duration-300">
                   <CardContent className="pt-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
