@@ -203,12 +203,26 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
                           <label className="block text-sm font-medium text-gray-700 mb-1">
                             Location
                           </label>
-                          <Input
-                            placeholder="Shanghai, China"
+                          <Select
                             value={supplier.location}
-                            onChange={(e) => updateSupplier(index, "location", e.target.value)}
-                            data-testid={`input-supplier-location-${index}`}
-                          />
+                            onValueChange={(value) => updateSupplier(index, "location", value)}
+                          >
+                            <SelectTrigger data-testid={`select-supplier-location-${index}`}>
+                              <SelectValue placeholder="Select port location" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Shanghai Port, China">Shanghai Port, China</SelectItem>
+                              <SelectItem value="Los Angeles Port, USA">Los Angeles Port, USA</SelectItem>
+                              <SelectItem value="New York Port, USA">New York Port, USA</SelectItem>
+                              <SelectItem value="Rotterdam Port, Netherlands">Rotterdam Port, Netherlands</SelectItem>
+                              <SelectItem value="Singapore Port, Singapore">Singapore Port, Singapore</SelectItem>
+                              <SelectItem value="Dubai Port, UAE">Dubai Port, UAE</SelectItem>
+                              <SelectItem value="Mumbai Port, India">Mumbai Port, India</SelectItem>
+                              <SelectItem value="Santos Port, Brazil">Santos Port, Brazil</SelectItem>
+                              <SelectItem value="London Gateway, UK">London Gateway, UK</SelectItem>
+                              <SelectItem value="Cape Town Port, South Africa">Cape Town Port, South Africa</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -287,12 +301,26 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
                     <FormItem>
                       <FormLabel>Primary Shipping Routes</FormLabel>
                       <FormControl>
-                        <Textarea
-                          placeholder="Asia-Pacific → West Coast USA via Port of Los Angeles"
-                          rows={3}
-                          {...field}
-                          data-testid="textarea-logistics-routes"
-                        />
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <SelectTrigger data-testid="select-logistics-routes">
+                            <SelectValue placeholder="Select primary shipping route" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="New York Port to Mumbai Port">New York Port to Mumbai Port</SelectItem>
+                            <SelectItem value="Shanghai Port to Los Angeles Port">Shanghai Port to Los Angeles Port</SelectItem>
+                            <SelectItem value="Rotterdam Port to New York Port">Rotterdam Port to New York Port</SelectItem>
+                            <SelectItem value="Singapore Port to Dubai Port">Singapore Port to Dubai Port</SelectItem>
+                            <SelectItem value="Los Angeles Port to Shanghai Port">Los Angeles Port to Shanghai Port</SelectItem>
+                            <SelectItem value="Mumbai Port to London Gateway">Mumbai Port to London Gateway</SelectItem>
+                            <SelectItem value="Santos Port to Rotterdam Port">Santos Port to Rotterdam Port</SelectItem>
+                            <SelectItem value="Dubai Port to Singapore Port">Dubai Port to Singapore Port</SelectItem>
+                            <SelectItem value="Cape Town Port to Santos Port">Cape Town Port to Santos Port</SelectItem>
+                            <SelectItem value="London Gateway to Cape Town Port">London Gateway to Cape Town Port</SelectItem>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -381,13 +409,111 @@ export default function SupplyChainForm({ onAssessmentCreated, isProcessing }: S
                 name="riskFactors"
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel>Select applicable risk factors (check all that apply)</FormLabel>
                     <FormControl>
-                      <Textarea
-                        placeholder="Recent geopolitical tensions in supplier regions, port congestion issues, currency fluctuations, regulatory changes..."
-                        rows={4}
-                        {...field}
-                        data-testid="textarea-risk-factors"
-                      />
+                      <div className="space-y-3 mt-2">
+                        {/* Predefined Risk Factors as Checkboxes */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                          <label className="flex items-center space-x-2">
+                            <Checkbox 
+                              checked={field.value?.includes('Geopolitical tensions in supplier regions')}
+                              onCheckedChange={(checked) => {
+                                const currentFactors = field.value?.split(', ') || [];
+                                if (checked) {
+                                  field.onChange([...currentFactors, 'Geopolitical tensions in supplier regions'].join(', '));
+                                } else {
+                                  field.onChange(currentFactors.filter(f => f !== 'Geopolitical tensions in supplier regions').join(', '));
+                                }
+                              }}
+                              data-testid="checkbox-risk-geopolitical"
+                            />
+                            <span className="text-sm">Geopolitical tensions in supplier regions</span>
+                          </label>
+                          <label className="flex items-center space-x-2">
+                            <Checkbox 
+                              checked={field.value?.includes('Port congestion issues')}
+                              onCheckedChange={(checked) => {
+                                const currentFactors = field.value?.split(', ') || [];
+                                if (checked) {
+                                  field.onChange([...currentFactors, 'Port congestion issues'].join(', '));
+                                } else {
+                                  field.onChange(currentFactors.filter(f => f !== 'Port congestion issues').join(', '));
+                                }
+                              }}
+                              data-testid="checkbox-risk-congestion"
+                            />
+                            <span className="text-sm">Port congestion issues</span>
+                          </label>
+                          <label className="flex items-center space-x-2">
+                            <Checkbox 
+                              checked={field.value?.includes('Currency fluctuations')}
+                              onCheckedChange={(checked) => {
+                                const currentFactors = field.value?.split(', ') || [];
+                                if (checked) {
+                                  field.onChange([...currentFactors, 'Currency fluctuations'].join(', '));
+                                } else {
+                                  field.onChange(currentFactors.filter(f => f !== 'Currency fluctuations').join(', '));
+                                }
+                              }}
+                              data-testid="checkbox-risk-currency"
+                            />
+                            <span className="text-sm">Currency fluctuations</span>
+                          </label>
+                          <label className="flex items-center space-x-2">
+                            <Checkbox 
+                              checked={field.value?.includes('Regulatory changes')}
+                              onCheckedChange={(checked) => {
+                                const currentFactors = field.value?.split(', ') || [];
+                                if (checked) {
+                                  field.onChange([...currentFactors, 'Regulatory changes'].join(', '));
+                                } else {
+                                  field.onChange(currentFactors.filter(f => f !== 'Regulatory changes').join(', '));
+                                }
+                              }}
+                              data-testid="checkbox-risk-regulatory"
+                            />
+                            <span className="text-sm">Regulatory changes</span>
+                          </label>
+                          <label className="flex items-center space-x-2">
+                            <Checkbox 
+                              checked={field.value?.includes('Pirates or terrorist threats')}
+                              onCheckedChange={(checked) => {
+                                const currentFactors = field.value?.split(', ') || [];
+                                if (checked) {
+                                  field.onChange([...currentFactors, 'Pirates or terrorist threats'].join(', '));
+                                } else {
+                                  field.onChange(currentFactors.filter(f => f !== 'Pirates or terrorist threats').join(', '));
+                                }
+                              }}
+                              data-testid="checkbox-risk-security"
+                            />
+                            <span className="text-sm">Pirates or terrorist threats</span>
+                          </label>
+                        </div>
+                        
+                        {/* Other Risk Factors Text Area */}
+                        <div className="mt-4">
+                          <label className="flex items-center space-x-2 mb-2">
+                            <Checkbox data-testid="checkbox-risk-other" />
+                            <span className="text-sm font-medium">Other risk factors (specify below)</span>
+                          </label>
+                          <Textarea
+                            placeholder="Describe any additional risk factors not listed above..."
+                            rows={3}
+                            onChange={(e) => {
+                              const otherRisks = e.target.value;
+                              const predefinedRisks = ['Geopolitical tensions in supplier regions', 'Port congestion issues', 'Currency fluctuations', 'Regulatory changes', 'Pirates or terrorist threats']
+                                .filter(risk => field.value?.includes(risk));
+                              if (otherRisks.trim()) {
+                                field.onChange([...predefinedRisks, otherRisks].join(', '));
+                              } else {
+                                field.onChange(predefinedRisks.join(', '));
+                              }
+                            }}
+                            data-testid="textarea-risk-other"
+                          />
+                        </div>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
