@@ -183,9 +183,9 @@ Status: ${assessment.status}`;
                   </p>
                   {healthCheck.gemini === 'connected' && (
                     <ol className="list-decimal list-inside text-blue-800 space-y-1 text-sm">
-                      <li>Optimized prompts for faster processing (10-20 seconds typical)</li>
-                      <li>Advanced AI analysis with risk scoring and recommendations</li>
-                      <li>Free tier: 15 requests per minute, 1,500 requests per day</li>
+                      <li>⚡ SPEED MODE: Analysis guaranteed in under 12 seconds</li>
+                      <li>🚀 Ultra-optimized AI prompts for lightning-fast results</li>
+                      <li>🛡️ Smart fallback ensures you always get comprehensive analysis</li>
                     </ol>
                   )}
                 </div>

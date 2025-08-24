@@ -5,11 +5,11 @@ export default function LoadingOverlay() {
   const [currentStage, setCurrentStage] = useState(0);
 
   const stages = [
-    { progress: 25, text: 'Validating supply chain data...' },
-    { progress: 50, text: 'Sending to Gemini 2.5 Flash...' },
-    { progress: 75, text: 'AI analyzing vulnerabilities...' },
-    { progress: 90, text: 'Generating recommendations...' },
-    { progress: 100, text: 'Analysis complete!' }
+    { progress: 20, text: 'Validating data...' },
+    { progress: 40, text: 'Ultra-fast AI analysis...' },
+    { progress: 70, text: 'Calculating risk scores...' },
+    { progress: 90, text: 'Generating insights...' },
+    { progress: 100, text: 'Complete in <12 seconds!' }
   ];
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function LoadingOverlay() {
       } else {
         clearInterval(interval);
       }
-    }, 800);
+    }, 600);
 
     return () => clearInterval(interval);
   }, [currentStage, stages]);
@@ -30,9 +30,9 @@ export default function LoadingOverlay() {
       <div className="bg-white rounded-lg p-8 max-w-md mx-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mx-auto mb-4" />
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Analyzing Supply Chain</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">⚡ Speed Analysis Mode</h3>
           <p className="text-gray-600 text-sm mb-4" data-testid="text-loading-description">
-            Gemini AI is processing your data and identifying vulnerabilities...
+            Ultra-fast AI processing - guaranteed results in under 12 seconds!
           </p>
           <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
             <div 

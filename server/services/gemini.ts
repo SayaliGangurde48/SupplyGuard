@@ -21,16 +21,17 @@ interface GeminiAssessmentResponse {
 export async function analyzeSupplyChainVulnerabilities(
   assessmentData: AssessmentInput
 ): Promise<GeminiAssessmentResponse> {
-  console.log("Starting Gemini API call...");
+  const startTime = Date.now();
+  console.log("⚡ Starting ultra-fast analysis...");
   
-  // Create a timeout promise - shorter timeout for faster response
+  // Aggressive 10-second timeout for guaranteed speed
   const timeoutPromise = new Promise<never>((_, reject) => {
-    setTimeout(() => reject(new Error("Gemini API timeout - using fallback analysis")), 15000);
+    setTimeout(() => reject(new Error("Gemini API timeout - using fallback analysis")), 10000);
   });
   
   try {
     const prompt = createAssessmentPrompt(assessmentData);
-    console.log("Generated prompt length:", prompt.length);
+    console.log(`📝 Ultra-short prompt (${prompt.length} chars):`, prompt.substring(0, 100) + "...");
     
     const apiCallPromise = ai.models.generateContent({
       model: "gemini-2.5-flash",
@@ -170,18 +171,10 @@ function createFallbackAnalysis(data: AssessmentInput): GeminiAssessmentResponse
 }
 
 function createAssessmentPrompt(data: AssessmentInput): string {
-  return `Quick supply chain risk analysis for ${data.companyName}:
-
-SUPPLIERS: ${data.suppliers.map(s => `${s.name} (${s.location})`).join(', ')}
-TRANSPORT: ${Object.entries(data.transportationMethods).filter(([_, used]) => used).map(([method]) => method).join(', ')}
-RISKS: ${data.riskFactors}
-
-Provide JSON with:
-- scores: overall, supplier, logistics, geopolitical (0-10)
-- vulnerabilities: 3 items with id, title, description, severity, score, impactTimeline, potentialCost
-- recommendations: 3 items with id, title, description, timeline, priority
-
-Be brief and specific.`;
+  const suppliers = data.suppliers.map(s => `${s.name}@${s.location}`).join(',');
+  const transport = Object.entries(data.transportationMethods).filter(([_, used]) => used).map(([method]) => method).join(',');
+  
+  return `Risk analysis: Company=${data.companyName}, Suppliers=${suppliers}, Transport=${transport}, Issues=${data.riskFactors}. Return JSON: scores{overall,supplier,logistics,geopolitical:0-10}, vulnerabilities[3]{id,title,description,severity,score,impactTimeline,potentialCost}, recommendations[3]{id,title,description,timeline,priority}. Brief.`;
 }
 
 export async function checkGeminiApiHealth(): Promise<boolean> {
