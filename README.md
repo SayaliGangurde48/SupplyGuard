@@ -1,62 +1,87 @@
-🌍 SUPPLY GUARD – AI-Powered Supply Chain Vulnerability Assessment
+🌍 SecureSupply AI – AI-Powered Supply Chain Vulnerability Assessment
 
-🚀 Supply Guard is an AI-driven platform that protects global supply chains by identifying vulnerabilities in transportation & security.
-It detects fraud, delays, and risks, then recommends sustainable & economical strategies to make supply chains resilient and future-proof.
+🔒 Making supply chains resilient, intelligent, and future-proof.
 
-🌐 Live Prototype: 👉 https://supply-guard-hackwave.replit.app/
+🌐 Live Prototype:https://supply-guard-hackwave.replit.app/
 
-✨ Key Features
+✨ Overview
 
-🔎 Smart Vulnerability Detection → Finds fake receipts, billing fraud, & transport risks.
+SecureSupply AI is an AI-driven platform that protects global supply chains by detecting vulnerabilities in ports, transportation, and security operations.
+It doesn’t just alert you — it simulates ripple effects, quantifies risks in $$ and days, and recommends smart recovery strategies to keep industries like Retail, Automotive, and Healthcare running smoothly.
 
-🛰 Real-Time Monitoring → Tracks delays, route risks & security threats.
+🔑 Key Features
 
-📊 Interactive Dashboard → Easy-to-read graphs & insights for quick action.
+🔍 Smart Vulnerability Detection → Detects customs delays, congestion, fraud, and regulatory risks.
 
-🤖 AI-Powered Suggestions → Gives recovery & prevention strategies.
+⏱ Real-Time Monitoring → Tracks port disruptions, weather alerts, and route risks with live updates.
+
+📊 Interactive Dashboard → Global supply chain map with active, warning, critical status.
+
+🤖 AI-Powered Suggestions → Gemini AI recommends rerouting, pre-clearance, partial air freight, and buffer stock.
+
+🌊 Ripple Effect Simulation → Shows how one disruption spreads across the chain.
+
+📑 Reports & Exports → Generate PDF, Excel, JSON reports for decision-making.
 
 🌱 Sustainable & Economical → Aligned with UN SDGs (Goal 9 & Goal 12).
 
 🛠 Tech Stack
 
-💻 Frontend → HTML, CSS, JavaScript (Replit-based UI)
-⚙️ Backend → Python (Flask / FastAPI)
-🗄 Database → SQLite / JSON (for prototype)
-🧠 AI/ML → Rule-based + anomaly detection models
-☁️ Deployment → Replit
+Frontend:
+⚛️ React 18 + TypeScript • 🎨 Tailwind CSS • 🧩 Radix UI + shadcn/ui • 🔄 TanStack Query • 🎥 Framer Motion • Wouter Router
 
-🚀 Getting Started (Run Locally)
+Backend:
+🟢 Node.js + Express.js • 📡 RESTful API (JSON) • 🗄 PostgreSQL (Neon serverless) • 🛠 Drizzle ORM • FastAPI (AI connectors)
 
-1️⃣ Clone this repository
+UI/UX & Visualization:
+📊 Recharts (graphs) • 🗺 Interactive World Map • 🖼 Lucide React + React Icons • 📅 React Day Picker
 
-git clone https://github.com/<your-username>/supply-guard.git
-cd supply-guard
+Dev Tools:
+⚡ Vite • ESBuild • PostCSS • Hot Module Replacement • Drizzle Kit
 
+AI/ML & Integrations:
+🤖 Gemini AI API • 🌦 Open-Meteo (Weather) • 💱 exchangerate.host (Currency) • 🌐 GDELT (Geopolitical Events)
 
-2️⃣ Install dependencies
+🚀 How It Works
 
-pip install -r requirements.txt
+Detect → AI ingests customs/security alerts, weather, FX, and event signals.
 
+Simulate → Ripple effect shows cascading delays across ports, DCs, and sectors.
 
-3️⃣ Run the app
+Quantify → Risk KPIs = Service-at-Risk %, Revenue-at-Risk ($), Avg Lead-time Δ.
 
-python app.py
+Recommend → AI suggests resilient strategies with cost/time/risk trade-offs.
 
+🎯 Target Audience
 
-4️⃣ Open in browser
+🏭 Manufacturers (Automotive, Electronics, Healthcare)
 
-http://127.0.0.1:5000/
+🚢 Logistics Providers (Shipping, Freight, 3PLs)
 
-📌 Use Cases
+🏦 Insurance Companies (risk-based premiums)
 
-🏭 Manufacturers → Secure raw material sourcing.
-🚚 Logistics Providers → Detect transport fraud & risks.
-🛡 Governments → Ensure supply chain security.
-📦 E-commerce → Stop delivery fraud & optimize risk mgmt.
+🏛 Governments & Policymakers (monitor trade disruptions)
 
-🎯 Future Scope
+📸 Screenshots
 
-✨ Real-time APIs (weather, geopolitics, shipping).
-✨ AI predictive analytics for disruptions.
-✨ Blockchain for tamper-proof delivery records.
-✨ Mobile App for instant alerts.
+🌐 Global Supply Chain Map (Live Network Monitor)
+
+⚠️ Security Event Monitor (Customs alerts, weather disruptions)
+
+📊 Ripple Effect Simulation (delay propagation)
+
+📝 Risk Mitigation Recommendations (cost vs risk vs time)
+
+📑 Exported Reports (PDF, Excel, JSON)
+
+🌍 Impact & SDGs
+
+UN Goal 9 → Industry, Innovation & Infrastructure
+
+UN Goal 12 → Responsible Consumption & Production
+
+Our solution helps industries save millions in losses, improve resilience, and ensure critical goods reach their destinations.
+
+👩‍💻 Team & Hackathon
+
+Built at Hackwave 2.0 (36-hour National Hackathon) on Replit AI using modern full-stack tech.
